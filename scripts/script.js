@@ -1,41 +1,48 @@
 import * as THREE from 'three';
 
+const CAMERA_FOV = 75;
+const CAMERA_ASPECT_RATIO = window.innerWidth / window.innerHeight;
+const CAMERA_NEAR = 0.1;
+const CAMERA_FAR = 1000;
+
+const RENDERER_CLEAR_COLOR = 0xbaf9ff;  // 背景色
+const AMBIENT_LIGHT_COLOR = 0xffffff;
+
+const X_DIRECTION = -1;  // 回転の向き。-1でマウスと同じ向き、1でマウスと逆向きに回る
+
 let scene, camera, renderer;
 let isMouseDown = false;
 let mouseX = 0;
 let rotate = 0;
 
 function init() {
+
   // シーンを作成
   scene = new THREE.Scene();
 
   // カメラを作成
   camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
+    CAMERA_FOV,
+    CAMERA_ASPECT_RATIO,
+    CAMERA_NEAR,
+    CAMERA_FAR
   );
   camera.position.z = 1;
 
   // レンダラーを作成
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setClearColor(0xbaf9ff, 1);
+  renderer.setClearColor(RENDERER_CLEAR_COLOR, 1);
   document.body.appendChild(renderer.domElement);
 
-  // 光源を作成
-  const directionalLight = new THREE.DirectionalLight(0xffffff);
-  directionalLight.position.set(1, 1, 1);
-
   // 自然光を追加
-  const light = new THREE.AmbientLight(0xffffff, 1);
+  const light = new THREE.AmbientLight(AMBIENT_LIGHT_COLOR, 1);
   scene.add(light);
 }
 
 
 function animate() {
-  const targetRot = (mouseX / window.innerWidth) * 360;
+  const targetRot = (mouseX / window.innerWidth) * 360 * X_DIRECTION;
   rotate += (targetRot - rotate);
   if (!isMouseDown) {
     mouseX += 0.2;
