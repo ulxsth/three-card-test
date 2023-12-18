@@ -31,20 +31,15 @@ function init() {
   // 自然光を追加
   const light = new THREE.AmbientLight(0xffffff, 1);
   scene.add(light);
-
-  // 立方体を作成
-  const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-  const material = new THREE.MeshNormalMaterial();
-  const cube = new THREE.Mesh(geometry, material);
-  cube.rotation.x = Math.PI / 4;
-  cube.rotation.y = Math.PI / 4;
-  scene.add(cube);
 }
 
 
 function animate() {
   const targetRot = (mouseX / window.innerWidth) * 360;
   rotate += (targetRot - rotate);
+  if (!isMouseDown) {
+    mouseX += 0.2;
+  }
 
   const radian = rotate * Math.PI / 180;
   camera.position.x = 1 * Math.sin(radian);
@@ -72,5 +67,13 @@ function main() {
 
   init();
   animate();
+
+  // 立方体を作成
+  const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+  const material = new THREE.MeshNormalMaterial();
+  const cube = new THREE.Mesh(geometry, material);
+  cube.rotation.x = Math.PI / 4;
+  cube.rotation.y = Math.PI / 4;
+  scene.add(cube);
 }
 document.addEventListener('DOMContentLoaded', main);
